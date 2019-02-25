@@ -89,13 +89,14 @@ echo "daemon=1" >> $CONF_DIR/$CONF_FILE
 echo "logtimestamps=1" >> $CONF_DIR/$CONF_FILE
 echo "masternode=1" >> $CONF_DIR/$CONF_FILE
 echo "port=$PORT" >> $CONF_DIR/$CONF_FILE
+echo "addnode=207.148.123.138:5151 >> $CONF_DIR/$CONF_FILE
+echo "addnode=45.76.185.38:5151 >> $CONF_DIR/$CONF_FILE
+echo "addnode=144.202.112.236:5151 >> $CONF_DIR/$CONF_FILE
 echo "addnode=104.238.170.106:5151 >> $CONF_DIR/$CONF_FILE
 echo "addnode=206.189.0.35:5151 >> $CONF_DIR/$CONF_FILE
 echo "addnode=174.138.3.221:5151 >> $CONF_DIR/$CONF_FILE
 echo "addnode=167.99.43.91:5151 >> $CONF_DIR/$CONF_FILE
 echo "addnode=159.203.101.47:5151 >> $CONF_DIR/$CONF_FILE
-echo "addnode=45.76.185.38:5151 >> $CONF_DIR/$CONF_FILE
-echo "addnode=144.202.112.236:5151 >> $CONF_DIR/$CONF_FILE
 echo "masternodeaddr=$IP:$PORT" >> $CONF_DIR/$CONF_FILE
 echo "masternodeprivkey=$PRIVKEY" >> $CONF_DIR/$CONF_FILE
 
