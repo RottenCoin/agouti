@@ -79,7 +79,7 @@ CONF_FILE=agouti.conf
 PORT=5151
 
 mkdir -p $CONF_DIR
-echo "rpcuser=user"`shuf -i 100000-10000000 -n 1` > $CONF_DIR/$CONF_FILE
+echo "rpcuser=user"`shuf -i 100000-10000000 -n 1` >> $CONF_DIR/$CONF_FILE
 echo "rpcpassword=pass"`shuf -i 100000-10000000 -n 1` >> $CONF_DIR/$CONF_FILE
 echo "rpcallowip=127.0.0.1" >> $CONF_DIR/$CONF_FILE
 echo "rpcport=6161" >> $CONF_DIR/$CONF_FILE
