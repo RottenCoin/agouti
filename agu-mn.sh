@@ -102,4 +102,3 @@ echo "masternodeprivkey=$PRIVKEY" >> $CONF_DIR/$CONF_FILE
 
 agoutid -daemon
 
-
