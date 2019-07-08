@@ -22,7 +22,7 @@ Build-Depends: debhelper,
  libqrencode-dev,
  libprotobuf-dev, protobuf-compiler
 Standards-Version: 3.9.2
-Homepage: http://www.agouti.org
+Homepage: http://www.agouti.io
 Vcs-Git: git://github.com/agoutiproject/Agouti.git
 Vcs-Browser: http://github.com/agoutiproject/Agouti
 
