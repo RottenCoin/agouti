@@ -33,6 +33,8 @@ class CTxBudgetPayment;
 
 static const CAmount PROPOSAL_FEE_TX = (50 * COIN);
 static const CAmount BUDGET_FEE_TX = (50 * COIN);
+static const CAmount PROPOSAL_FEE_TX_NEW = (10 * COIN);
+static const CAmount BUDGET_FEE_TX_NEW = (10 * COIN);
 static const int64_t BUDGET_VOTE_UPDATE_MIN = 60 * 60;
 
 extern std::vector<CBudgetProposalBroadcast> vecImmatureBudgetProposals;
@@ -236,7 +238,8 @@ public:
     bool IsTransactionValid(const CTransaction& txNew, int nBlockHeight);
     std::string GetRequiredPaymentsString(int nBlockHeight);
     void FillBlockPayee(CMutableTransaction& txNew, CAmount nFees, bool fProofOfStake);
-
+    void FillBurnBlockPayee(CMutableTransaction& txNew, CAmount nFees, bool fProofOfStake);
+    
     void CheckOrphanVotes();
     void Clear()
     {
