@@ -184,6 +184,9 @@ public:
 
         vSeeds.push_back(CDNSSeedData("seed.agouti.io","seed.agouti.io"));
         vSeeds.push_back(CDNSSeedData("seed2.agouti.io","seed2.agouti.io"));
+        vSeeds.push_back(CDNSSeedData("207.148.123.138", "207.148.123.138"));
+        vSeeds.push_back(CDNSSeedData("45.76.185.38", "45.76.185.38"));
+        vSeeds.push_back(CDNSSeedData("144.202.112.236", "144.202.112.236"));
         vSeeds.push_back(CDNSSeedData("167.86.106.67","167.86.106.67"));
         vSeeds.push_back(CDNSSeedData("173.212.254.163","173.212.254.163"));
 
