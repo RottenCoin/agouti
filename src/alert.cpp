@@ -22,8 +22,6 @@
 #include <boost/foreach.hpp>
 #include <boost/thread.hpp>
 
-#include "main.h"
-
 using namespace std;
 
 map<uint256, CAlert> mapAlerts;
@@ -147,18 +145,7 @@ bool CAlert::RelayTo(CNode* pnode) const
 
 bool CAlert::CheckSignature() const
 {
-    std::vector<unsigned char> stdVecAlertKey;
-
-    if (chainActive.Height() + 1 < Params().GetForkBlockHeight())
-    {
-        stdVecAlertKey = Params().AlertKey();
-    }
-    else
-    {
-        stdVecAlertKey = Params().AlertKeyNew();
-    }
-
-    CPubKey key(stdVecAlertKey);
+    CPubKey key(Params().AlertKey());
     if (!key.Verify(Hash(vchMsg.begin(), vchMsg.end()), vchSig))
         return error("CAlert::CheckSignature() : verify signature failed");
 

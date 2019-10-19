@@ -30,15 +30,7 @@ int nSubmittedFinalBudget;
 int GetBudgetPaymentCycleBlocks()
 {
     // Amount of blocks in a months period of time (using 1 minutes per) = (60*24*30)
-    if (Params().NetworkID() == CBaseChainParams::MAIN) 
-    {
-        CBlockIndex* pindexPrev = chainActive.Tip();
-        if (pindexPrev->nHeight + 1 < Params().GetForkBlockHeight())
-            return 43200;
-
-        return 2160;
-    }
-
+    if (Params().NetworkID() == CBaseChainParams::MAIN) return 43200;
     //for testing purposes
 
     return 720; // twice a day in testnet
@@ -67,17 +59,7 @@ bool IsBudgetCollateralValid(uint256 nTxCollateralHash, uint256 nExpectedHash, s
             LogPrint("masternode","CBudgetProposalBroadcast::IsBudgetCollateralValid - %s\n", strError);
             return false;
         }
-
-        CAmount proposalAmount;
-        if (chainActive.Height() + 1 < Params().GetForkBlockHeight())
-        {
-            proposalAmount = PROPOSAL_FEE_TX;
-        }
-        else
-        {
-            proposalAmount = PROPOSAL_FEE_TX_NEW;
-        }
-        if (o.scriptPubKey == findScript && o.nValue >= proposalAmount) foundOpReturn = true;
+        if (o.scriptPubKey == findScript && o.nValue >= PROPOSAL_FEE_TX) foundOpReturn = true;
     }
     if (!foundOpReturn) {
         strError = strprintf("Couldn't find opReturn %s in %s", nExpectedHash.ToString(), txCollateral.ToString());
@@ -570,49 +552,6 @@ void CBudgetManager::FillBlockPayee(CMutableTransaction& txNew, CAmount nFees, b
     }
 }
 
-void CBudgetManager::FillBurnBlockPayee(CMutableTransaction& txNew, CAmount nFees, bool fProofOfStake)
-{
-    CBlockIndex* pindexPrev = chainActive.Tip();
-    if (!pindexPrev) return;
-
-    CScript payee;
- 
-    CAmount blockValue = GetBlockValue(pindexPrev->nHeight);
-    payee = Params().GetBurnRewardScriptAtHeight(pindexPrev->nHeight);
-    CAmount treasurePayment = blockValue - GetBlockValue(pindexPrev->nHeight + 100) * 0.1;
-
-	if (fProofOfStake) {
-		/**For Proof Of Stake vout[0] must be null
-		 * Stake reward can be split into many different outputs, so we must
-		 * use vout.size() to align with several different cases.
-		 * An additional output is appended as the masternode payment
-		 */
-		unsigned int i = txNew.vout.size();
-		txNew.vout.resize(i + 1);
-		txNew.vout[i].scriptPubKey = payee;
-		txNew.vout[i].nValue = treasurePayment;
-		
-		if (txNew.vout.size() == 4) { //here is a situation: if stake was split, subtraction from the last one may give us negative value, so we have split it
-			//subtract burn payment from the stake reward
-			txNew.vout[i - 1].nValue -= treasurePayment/2;
-			txNew.vout[i - 2].nValue -= treasurePayment/2;
-		} else {
-			//subtract burn payment from the stake reward
-			txNew.vout[i - 1].nValue -= treasurePayment;
-		}
-	} else {
-		txNew.vout.resize(2);
-		txNew.vout[1].scriptPubKey = payee;
-		txNew.vout[1].nValue = treasurePayment;
-		txNew.vout[0].nValue = blockValue - treasurePayment;
-	}
-
-	CTxDestination address1;
-	ExtractDestination(payee, address1);
-	CBitcoinAddress address2(address1);
-
-}
-
 CFinalizedBudget* CBudgetManager::FindFinalizedBudget(uint256 nHash)
 {
     if (mapFinalizedBudgets.count(nHash))
@@ -901,14 +840,7 @@ CAmount CBudgetManager::GetTotalBudget(int nHeight)
     nSubsidy = GetBlockValue(nHeight);
     LogPrint("masternode","CBudgetManager::GetTotalBudget(%d): GetBlockValue(%d) returned %f COINs\n", nHeight, nHeight, nSubsidy / COIN);
 
-    if (nHeight + 1 < Params().GetForkBlockHeight())
-    {
-        totalBudget = ((nSubsidy / 100) * 2) * GetBudgetPaymentCycleBlocks();
-    }
-    else
-    {
-        totalBudget = ((nSubsidy / 100) * 20) * GetBudgetPaymentCycleBlocks();
-    }
+    totalBudget = ((nSubsidy / 100) * 2) * GetBudgetPaymentCycleBlocks();
 
     LogPrint("masternode","CBudgetManager::GetTotalBudget(%d) returning %f COINs\n", nHeight, totalBudget / COIN);
     return totalBudget;

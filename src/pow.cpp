@@ -38,15 +38,6 @@ unsigned int static DarkGravityWave(const CBlockIndex* pindexLast)
         int64_t nTargetSpacing = 60;
         int64_t nTargetTimespan = 60 * 40;
 
-        if(pindexLast->nHeight + 1 < Params().GetForkBlockHeight())
-        {
-            nTargetSpacing = 60;
-        }
-        else
-        {
-            nTargetSpacing = 20 * 60;
-        }
-
         int64_t nActualSpacing = 0;
         if (pindexLast->nHeight != 0)
             nActualSpacing = pindexLast->GetBlockTime() - pindexLast->pprev->GetBlockTime();

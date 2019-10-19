@@ -760,15 +760,7 @@ void CMasternodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
         //  - this is checked later by .check() in many places and by ThreadCheckObfuScationPool()
         if (mnb.CheckInputsAndAdd(nDoS)) {
             // use this as a peer
-            if(chainActive.Height() + 1 < Params().GetForkBlockHeight())
-            {
-                addrman.Add(CAddress(mnb.addr), pfrom->addr, 2 * 60 * 60);
-            }
-            else
-            {
-                addrman.Add(CAddress(mnb.addr), pfrom->addr, 24 * 60 * 60);        
-            }
-
+            addrman.Add(CAddress(mnb.addr), pfrom->addr, 2 * 60 * 60);
             masternodeSync.AddedMasternodeList(mnb.GetHash());
         } else {
             LogPrint("masternode","mnb - Rejected Masternode entry %s\n", mnb.vin.prevout.hash.ToString());
@@ -1029,14 +1021,7 @@ void CMasternodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
             }
 
             // use this as a peer
-            if(chainActive.Height() + 1 < Params().GetForkBlockHeight())
-            {
-                addrman.Add(CAddress(addr), pfrom->addr, 2 * 60 * 60);
-            }
-            else
-            {
-                addrman.Add(CAddress(addr), pfrom->addr, 24 * 60 * 60);        
-            }
+            addrman.Add(CAddress(addr), pfrom->addr, 2 * 60 * 60);
 
             // add Masternode
             CMasternode mn = CMasternode();

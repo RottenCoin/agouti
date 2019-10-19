@@ -646,6 +646,7 @@ bool InitSanityCheck(void)
     return true;
 }
 
+
 /** Initialize agouti.
  *  @pre Parameters should be parsed and config file should be read.
  */

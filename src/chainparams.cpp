@@ -12,8 +12,6 @@
 #include "util.h"
 #include "utilstrencodings.h"
 
-#include "base58.h"
-
 #include <assert.h>
 
 #include <boost/assign/list_of.hpp>
@@ -56,37 +54,12 @@ static void convertSeed6(std::vector<CAddress>& vSeedsOut, const SeedSpec6* data
 // + Contains no strange transactions
 static Checkpoints::MapCheckpoints mapCheckpoints =
     boost::assign::map_list_of
-    (     0, uint256("0x00000b2809bc550fcad87e2a4278952524d2cca9f08fa54ae69bfd25b5834619"))
-    (   500, uint256("0x000003ee41a46044a0571c28c8b73c5d060359f16255eac93ac78c4869ae7fb7"))
-    (   501, uint256("0x9c4a93d459468accb310d1c6d770cf91bdbf29e30bbdd9346d5b4f874f2254a6"))
-    (100001, uint256("0x9cf5acd90e629eeb5b0037f3c81ae0acb6dd882ce69e56565aa62ecb68581141"))
-    (200001, uint256("0x5187132b2d2d1e509c109ff33ffbf09c9ba1d009960d34b7ef9c73ce67a43992"))
-    (300001, uint256("0xd5a340b9ce647411d6ea0c8df66cac5054dffc8f639d5103cd3de029905beda0"))
-    (400001, uint256("0xb7ae70846d983f87298f19702d9c2e2373fe478eaee436941b0d4ca483fa3182"))
-    (410001, uint256("0xf0a9c99e7279833723cee1db3e794dfa24bb8627ba0cf1624ffa1289b46ea2fc"))
-    (420001, uint256("0x9b41c4b483c060cede6414f943462090836dbea9d0f7fbe144af3e07514d0a31"))
-    (421001, uint256("0x5bf746dcff0f3bc83d70167e9b58217e48d09d928d9dc66386b17421ecf6698b"))
-    (422001, uint256("0x45cec6d6b84017bcdf002ae737cb94e3f20dad10922338e4b5ed79f2711039dd"))
-    (422397, uint256("0xb2931d36e1f359a136b8e610fb50f5182f5ac6e267ca9052bac02e6e0ed7655c"))
-    ;
-/*
-2019-07-06 04:45:59 UpdateTip: new best=b2931d36e1f359a136b8e610fb50f5182f5ac6e267ca9052bac02e6e0ed7655c  height=422397  log2_work=63.495283  tx=852659  date=2019-07-06 04:46:36 progress=1.000001  cache=607
-*/
-// getblock b2931d36e1f359a136b8e610fb50f5182f5ac6e267ca9052bac02e6e0ed7655c
-// 1562388396: 07/06/2019 @ 4:46am (UTC)
-
-// static const Checkpoints::CCheckpointData data = {
-//     &mapCheckpoints,
-//     1536892874, // * UNIX timestamp of last checkpoint block
-//     0,      // * total number of transactions between genesis and last checkpoint
-//                 //   (the tx=... number in the SetBestChain debug.log lines)
-//     2000        // * estimated number of transactions per day after checkpoint
-// };
+    (     0, uint256("0x00000b2809bc550fcad87e2a4278952524d2cca9f08fa54ae69bfd25b5834619"));
 
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
-    1562388396, // * UNIX timestamp of last checkpoint block
-    852659,      // * total number of transactions between genesis and last checkpoint
+    1536892874, // * UNIX timestamp of last checkpoint block
+    0,      // * total number of transactions between genesis and last checkpoint
                 //   (the tx=... number in the SetBestChain debug.log lines)
     2000        // * estimated number of transactions per day after checkpoint
 };
@@ -116,18 +89,6 @@ libzerocoin::ZerocoinParams* CChainParams::Zerocoin_Params() const
     return &ZCParams;
 }
 
-std::string CChainParams::GetBurnRewardAddressAtHeight(int nHeight) const {
-    return vBurnRewardAddress;
-}
-
-CScript CChainParams::GetBurnRewardScriptAtHeight(int nHeight) const {
-    CBitcoinAddress address(GetBurnRewardAddressAtHeight(nHeight).c_str());
-    assert(address.IsValid());
-
-    CScript script = GetScriptForDestination(address.Get());
-    return script; 
-}
-
 class CMainParams : public CChainParams
 {
 public:
@@ -140,7 +101,6 @@ public:
         pchMessageStart[2] = 0x09;
         pchMessageStart[3] = 0x18;
         vAlertPubKey = ParseHex("041db49b9efa6c2b4b11dc319d3faa747587cf5369872072d9d5bbd02328e02f4beb40e176d1f53389e2797a16cd6eecfe7ab39a065a0b7d338d6cc099c1a9874a");
-        vAlertPubKeyNew = ParseHex("049ca38ccf50bc6ba5831beebc8eedc0a7f952b09af6973aa2a060f87844d6ec95f40c340ca88c2c37f6e05e2a0b24d1f7344b6d064182d46f8dc59bfe8ef35c94");
         nDefaultPort = 5151;
         bnProofOfWorkLimit = ~uint256(0) >> 20; // Agouti starting difficulty is 1 / 2^12
         nSubsidyHalvingInterval = 99999999;
@@ -178,14 +138,13 @@ public:
         genesis.nBits = 0x1e0ffff0;
         genesis.nNonce = 2056432;
 
-	    hashGenesisBlock = genesis.GetHash();
+	hashGenesisBlock = genesis.GetHash();
         assert(hashGenesisBlock == uint256("0x00000b2809bc550fcad87e2a4278952524d2cca9f08fa54ae69bfd25b5834619"));
         assert(genesis.hashMerkleRoot == uint256("0xdd258f84edeb4eb1efcdfc77c2183a2507625e4a1ea951fe6cbb16552ac882d9"));
 
-        vSeeds.push_back(CDNSSeedData("seed.agouti.io","seed.agouti.io"));
-        vSeeds.push_back(CDNSSeedData("seed2.agouti.io","seed2.agouti.io"));
-        vSeeds.push_back(CDNSSeedData("167.86.106.67","167.86.106.67"));
-        vSeeds.push_back(CDNSSeedData("173.212.254.163","173.212.254.163"));
+        vSeeds.push_back(CDNSSeedData("207.148.123.138", "207.148.123.138"));
+        vSeeds.push_back(CDNSSeedData("45.76.185.38", "45.76.185.38"));
+        vSeeds.push_back(CDNSSeedData("144.202.112.236", "144.202.112.236"));
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 83); // A
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 97); // G
@@ -208,7 +167,6 @@ public:
 
         nPoolMaxTransactions = 3;
         strSporkKey = "044FE5EBB7501A1BDCE6AA607A1E3A1125AE02885D1B73D20C2857BD86FC5C1A3A2FEB4080B9BC5444F329EDD9EA5896176B203F4CF5F6EDCB8CE1854FBEDD75B0";
-        strSporkKeyNew = "04f04d0c95ac1f1b0610620aa0a0749820d509bac77d25094c14edbcc5c7d845cec7c239b3fc4d8f6cf00e35d5100c2708ed67b990f77b0693951a80fd6b4e4f70";
         strObfuscationPoolDummyAddress = "aRnzrxp5zmEuZmzUDvhHNP8BorrD7appeL";
         nStartMasternodePayments = 1536892874;
 
@@ -226,9 +184,6 @@ public:
         nDefaultSecurityLevel = 100; //full security level for accumulators
         nZerocoinHeaderVersion = 4; //Block headers must be this version once zerocoin is active
         nBudget_Fee_Confirmations = 6; // Number of confirmations for the finalization fee
-
-        nForkBlockHeight = 570242;
-        vBurnRewardAddress="amKz9LMipv6dFTakyiKG21YhkDXXXFzVb7";
     }
 
     const Checkpoints::CCheckpointData& Checkpoints() const

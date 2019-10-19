@@ -80,18 +80,7 @@ bool fVerifyingBlocks = false;
 unsigned int nCoinCacheSize = 5000;
 bool fAlerts = DEFAULT_ALERTS;
 
-int UpdateStakeMinAge()
-{
-    if(chainActive.Height() + 1 < Params().GetForkBlockHeight())
-    {
-        return 60 * 60;
-    }
-    
-    return 24 * 60 * 60;
-}
-
-unsigned int nStakeMinAge = UpdateStakeMinAge();
-
+unsigned int nStakeMinAge = 60 * 60;
 int64_t nReserveBalance = 0;
 
 /** Fees smaller than this (in duffs) are considered zero fee (for relaying and mining)
@@ -2136,16 +2125,14 @@ int64_t GetBlockValue(int nHeight)
         nSubsidy = 1809759 * COIN;
     } else if (nHeight < 44641) {
         nSubsidy = 1.5 * COIN;
-    } else if (nHeight + 1 < Params().GetForkBlockHeight()) {
+    } else if (nHeight < 570241) {
         nSubsidy = 1 * COIN;
-    } else if (nHeight < 596161) {
-        nSubsidy = 8 * COIN;
-    } else if (nHeight < 648001) {
-        nSubsidy = 4 * COIN;
-    } else if (nHeight < 699841) {
-        nSubsidy = 2 * COIN;
+    } else if (nHeight < 1095840) {
+        nSubsidy = 0.5 * COIN;
+    } else if (nHeight < 1621440) {
+        nSubsidy = 0.25 * COIN;
     } else {
-        nSubsidy = 1 * COIN;
+        nSubsidy = 0.125 * COIN;
     }
 
     int64_t nMoneySupply = chainActive.Tip()->nMoneySupply;
@@ -2160,38 +2147,14 @@ int64_t GetBlockValue(int nHeight)
 
 }
 
-int nStartBurnBlock = 570241;
-int nBurnBlockStep = 100000;
-
-bool IsBurnBlock(int nHeight)
-{
-	if(nHeight < nStartBurnBlock)
-		return false;
-	else if( (nHeight-nStartBurnBlock) % nBurnBlockStep == 0)
-		return true;
-	else
-		return false;
-}
-
-int64_t GetBurnAward(int nHeight)
-{
-    int64_t nSubsidy = 0;
-
-	if(IsBurnBlock(nHeight)) {
-        nSubsidy = 100000 * COIN;
-		return nSubsidy; 
-	} else
-		return 0;
-}
-
 int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCount)
 {
     int64_t ret = 0;
 
     if (nHeight < 101) {
-	    ret = blockValue * 0;
+	ret = blockValue * 0;
     } else {
-	    ret = blockValue * 0.9;
+	ret = blockValue * 0.9;
     }
 
 	return ret;
@@ -3159,7 +3122,6 @@ void static UpdateTip(CBlockIndex* pindexNew)
                 ++nUpgraded;
             pindex = pindex->pprev;
         }
-        
         if (nUpgraded > 0)
             LogPrintf("SetBestChain: %d of last 100 blocks above version %d\n", nUpgraded, (int)CBlock::CURRENT_VERSION);
         if (nUpgraded > 100 / 2) {
@@ -5612,7 +5574,6 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             if (fReachable)
                 vAddrOk.push_back(addr);
         }
-
         addrman.Add(vAddrOk, pfrom->addr, 2 * 60 * 60);
         if (vAddr.size() < 1000)
             pfrom->fGetAddr = false;
@@ -6260,6 +6221,7 @@ int ActiveProtocol()
 
     // SPORK_15 is used for 70911. Nodes < 70911 don't see it and still get their protocol version via SPORK_14 and their
     // own ModifierUpgradeBlock()
+
     if (IsSporkActive(SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2))
             return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
     return MIN_PEER_PROTO_VERSION_BEFORE_ENFORCEMENT;

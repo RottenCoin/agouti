@@ -301,9 +301,7 @@ void TransactionRecord::updateStatus(const CWalletTx& wtx)
         (wtx.IsCoinBase() ? 1 : 0),
         wtx.nTimeReceived,
         idx);
-
     status.countsForBalance = wtx.IsTrusted() && !(wtx.GetBlocksToMaturity() > 0);
-
     status.depth = wtx.GetDepthInMainChain();
     status.cur_num_blocks = chainActive.Height();
     status.cur_num_ix_locks = nCompleteTXLocks;
