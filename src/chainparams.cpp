@@ -160,9 +160,17 @@ public:
         assert(hashGenesisBlock == uint256("0x00000b2809bc550fcad87e2a4278952524d2cca9f08fa54ae69bfd25b5834619"));
         assert(genesis.hashMerkleRoot == uint256("0xdd258f84edeb4eb1efcdfc77c2183a2507625e4a1ea951fe6cbb16552ac882d9"));
 
-        vSeeds.push_back(CDNSSeedData("207.148.123.138", "207.148.123.138"));
-        vSeeds.push_back(CDNSSeedData("45.76.185.38", "45.76.185.38"));
-        vSeeds.push_back(CDNSSeedData("144.202.112.236", "144.202.112.236"));
+        vSeeds.push_back(CDNSSeedData("173.212.254.163", "173.212.254.163"));
+        vSeeds.push_back(CDNSSeedData("167.86.106.67", "167.86.106.67"));
+        vSeeds.push_back(CDNSSeedData("167.86.91.191", "167.86.91.191"));
+        vSeeds.push_back(CDNSSeedData("144.91.97.155", "144.91.97.155"));
+        vSeeds.push_back(CDNSSeedData("207.180.202.182", "207.180.202.182"));
+        vSeeds.push_back(CDNSSeedData("seed1.agouti.io", "seed1.agouti.io"));
+        vSeeds.push_back(CDNSSeedData("seed1.agouti.io", "seed1.agouti.io"));
+        vSeeds.push_back(CDNSSeedData("seed2.agouti.io", "seed2.agouti.io"));
+        vSeeds.push_back(CDNSSeedData("seed3.agouti.io", "seed3.agouti.io"));
+        vSeeds.push_back(CDNSSeedData("seed4.agouti.io", "seed4.agouti.io"));
+        vSeeds.push_back(CDNSSeedData("seed5.agouti.io", "seed5.agouti.io"));
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 83); // A
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 97); // G
