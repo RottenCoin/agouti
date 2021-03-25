@@ -241,6 +241,7 @@ RES_ICONS = \
   qt/res/icons/tx_input.png \
   qt/res/icons/tx_output.png \
   qt/res/icons/tx_mined.png \
+  qt/res/icons/verify.png \
   qt/res/icons/unit_agouti.png \
   qt/res/icons/unit_magouti.png \
   qt/res/icons/unit_uagouti.png \
